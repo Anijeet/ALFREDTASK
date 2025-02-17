@@ -270,3 +270,18 @@ Open a pull request
 
 📜 License
 This project is licensed under the MIT License.
+
+
+## WORKING VIDEO
+
+   ## AUTHENTICATION
+https://github.com/user-attachments/assets/80df071e-ec90-44dd-9b95-1c61ddeeafeb
+
+  ## FLASHCARD SECTION
+
+
+https://github.com/user-attachments/assets/2bc4dc65-8d58-49ce-a2d0-e193415e9e7d
+
+
+
+
