@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const FlashcardList = ({ flashcards, onUpdateFlashcard, onDeleteFlashcard, answer, isDarkMode }) => {
+const FlashcardList = ({ flashcards, onUpdateFlashcard, onDeleteFlashcard, isDarkMode }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const answer=localStorage.getItem('answer')
 
   const handleNext = () => {
-    if (currentIndex < flashcards.length - 1 && flashcards[currentIndex].answer !== answer) {
+    if (currentIndex < flashcards.length - 1 ) {
       setCurrentIndex(currentIndex + 1);
     }
   };

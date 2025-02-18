@@ -12,28 +12,37 @@ const Dashboard = () => {
     const [flashcards, setFlashcards] = useState([])
     const [dueFlashcards, setDueFlashcards] = useState([])
     const [correct, setCorrect] = useState("")
-    const [answer, setAnswer] = useState("");
     const [isDarkMode, setIsDarkMode] = useState(false);
+    const [username,setUsername]=useState('')
 
     useEffect(() => {
         loadFlashcards()
-        // Check for saved theme preference
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme) {
             setIsDarkMode(savedTheme === 'dark');
         }
     }, [])
 
-    // Save theme preference
+   
     useEffect(() => {
         localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
-        // Apply dark mode to body
         document.body.className = isDarkMode ? 'bg-gray-900' : 'bg-white';
     }, [isDarkMode]);
 
     const toggleTheme = () => {
         setIsDarkMode(!isDarkMode);
     };
+
+    const user = async() =>{
+      const response = await axios.get(`${BACKEND_URL}/api/v1/user`, {
+        headers: {
+            "Authorization": localStorage.getItem("token")
+        }
+    });
+    setUsername(response.data[0].username)
+    }
+
+    user()
 
     const loadFlashcards = async () => {
         const cards = await axios.get(`${BACKEND_URL}/api/v1/flashcards`, {
@@ -93,6 +102,17 @@ const Dashboard = () => {
                 progress: undefined,
                 theme: isDarkMode ? "dark" : "light"
             });
+        }else{
+          toast.success("Right Answer", {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: isDarkMode ? "dark" : "light"
+        });
         }
         const updatedFlashcards = flashcards.map((card) => (card._id === updatedCard._id ? updatedCard : card))
         setFlashcards(updatedFlashcards)
@@ -124,6 +144,7 @@ const Dashboard = () => {
         <div className={`min-h-screen transition-colors duration-300 ${
             isDarkMode ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'
         }`}>
+          <div className="p-5 text-2xl capitalize font-serif">Hello, {username} </div>
             <div className="container mx-auto p-4">
                 <motion.button
                     whileHover={{ scale: 1.1 }}
@@ -143,14 +164,13 @@ const Dashboard = () => {
                 </p>
 
                 <FlashcardForm
-                    answer={answer}
-                    setAnswer={setAnswer}
+                   
                     onAddFlashcard={handleAddFlashcard}
                     isDarkMode={isDarkMode}
                 />
 
                 <FlashcardList
-                    answer={answer}
+                    
                     flashcards={dueFlashcards}
                     onUpdateFlashcard={handleUpdateFlashcard}
                     onDeleteFlashcard={handleDeleteFlashcard}

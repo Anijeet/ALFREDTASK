@@ -2,16 +2,17 @@ import React from "react";
 import { useState } from "react";
 import { motion } from "framer-motion";
 
-const FlashcardForm = ({ onAddFlashcard, setAnswer, answer, isDarkMode }) => {
+const FlashcardForm = ({ onAddFlashcard, isDarkMode }) => {
   const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState("");
   const [no, setNumber] = useState(Number);
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (question && answer && no) {
       onAddFlashcard(question, answer, no);
       setQuestion("");
       setAnswer("");
+      localStorage.setItem('answer',answer)
       setNumber(parseInt(no) + 1);
     }
   };

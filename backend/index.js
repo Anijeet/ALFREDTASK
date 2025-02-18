@@ -1,7 +1,6 @@
 import express, { response } from "express";
 import { UserModel,FlashcardModel } from "./db/db.js";
 import jwt from "jsonwebtoken";
-// import { UserMiddleware } from "./middleware";
 import cors from "cors";
 import { JWT_SECRET } from "./config.js";
 import { UserMiddleware } from "./middleware/middleware.js";
@@ -82,6 +81,19 @@ app.post('/api/v1/flashcards',UserMiddleware, async(req,res)=>{
       }
 })
 
+app.get('/api/v1/user',UserMiddleware,async(req,res)=>{
+  const userId = req.userId
+    
+    try {
+        const user = await UserModel.find({
+            _id:userId
+        });
+        res.status(200).json(user);
+      } catch (err) {
+        res.status(500).json({ message: err.message });
+      }
+})
+
 app.get('/api/v1/flashcards',UserMiddleware, async(req,res)=>{
     const userId = req.userId
     
@@ -119,10 +131,6 @@ app.put('/api/v1/flashcards/:id',UserMiddleware, async(req,res)=>{
             msg:"Incorrect answer"
           })
         }
-
-    
-        // const intervals = [1, 2, 4, 7, 15];
-        // flashcard.nextReview = new Date(Date.now() + intervals[flashcard.box - 1] * 24 * 60 * 60 * 1000);
     
         await flashcard.save();
         res.status(200).json({ flashcard, isCorrect });
